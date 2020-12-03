@@ -4,6 +4,10 @@ public abstract class ProductType {
     protected String name;
     protected double price;
 
+    /**
+     * @param name  general name for drink product.
+     * @param price general price of drink.
+     */
     public ProductType(String name, double price) {
         this.name = name;
         this.price = price;

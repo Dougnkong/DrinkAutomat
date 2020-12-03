@@ -1,20 +1,26 @@
 package drinkAutomat.model;
 
-import drinkAutomat.common.Coin;
+import drinkAutomat.common.CoinValue;
 import drinkAutomat.common.Drink;
 
 import java.util.HashMap;
 import java.util.List;
 
-
+/**
+ * This is used to return the drink and the change for the user.
+ */
 public class DrinkAndChange {
 
-    HashMap<Coin, Integer> change;
+    HashMap<CoinValue, Integer> change;
     Drink drink;
 
+    /**
+     * @param drink   ordered.
+     * @param changes rest after buying.
+     */
     public DrinkAndChange(Drink drink, List<CoinAndQuantity> changes) {
         this.drink = drink;
-        this.change = new HashMap<Coin, Integer>();
+        this.change = new HashMap<CoinValue, Integer>();
 
         for (CoinAndQuantity change : changes) {
 
@@ -27,11 +33,11 @@ public class DrinkAndChange {
         return drink.getName();
     }
 
-    public HashMap<Coin, Integer> getChange() {
+    public HashMap<CoinValue, Integer> getChange() {
         return change;
     }
 
-    public void setChange(HashMap<Coin, Integer> change) {
+    public void setChange(HashMap<CoinValue, Integer> change) {
         this.change = change;
     }
 }

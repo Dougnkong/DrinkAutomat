@@ -1,7 +1,7 @@
 package drinkAutomat.model;
 
 import drinkAutomat.common.Automat;
-import drinkAutomat.common.Coin;
+import drinkAutomat.common.CoinValue;
 import drinkAutomat.common.Drink;
 
 import java.util.ArrayList;
@@ -9,37 +9,57 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
+
+/**
+ * This class is an implementation of a drink machine, with the principal procedure.
+ */
 public class DrinkAutomat extends Automat {
     public static final String NOT_MORE_AVAILABLE = "The drink name you choose is not more available";
-    public static final String NOT_ENOUGH_MONEY = "You do not give enough coins for the drink you need.";
+    public static final String NOT_ENOUGH_MONEY = "You do not given enough coins for the drink you need.";
     public static final String NOT_ENOUGH_COINS_FOR_CHANGE = "Not enough coins for change";
 
     HashMap<String, Compartment> compartments;
     List<CoinAndQuantity> availableCoinForChange;
     List<CoinAndQuantity> returnMoney;
 
+    /**
+     * @param compartments: Each compartment contents only one drink type.
+     */
     public DrinkAutomat(HashMap<String, Compartment> compartments) {
         this.returnMoney = new ArrayList<>();
         this.availableCoinForChange = new ArrayList<>();
         this.compartments = compartments;
     }
 
-    private int getCoinSum(List<Coin> coins) {
+    private int getCoinSum(final List<Coin> coins) {
         int sumCoin = 0;
 
         for (Coin coin : coins) {
-            sumCoin += coin.getCoinType();
+            sumCoin += coin.getCoinValue().getValue();
         }
 
         return sumCoin;
     }
 
-    private boolean isNotEnoughCoinsGiven(Drink drink, List<Coin> coins) {
+    /**
+     * @param drink
+     * @param coins
+     * @return Price bigger than given coins (=true) false else.
+     */
+    private boolean isNotEnoughCoinsGiven(Drink drink, final List<Coin> coins) {
 
         return drink.getPrice() * 100 > getCoinSum(coins);
 
     }
 
+    /**
+     * This method manages the purchase process and in the best case returns
+     * an object containing the order and the exchange coin.
+     *
+     * @param drink: Contains the drink the user choose.
+     * @param coins: Contains the list of coins given for the user.
+     * @return if success the user's oder.
+     */
     public DrinkAndChange buy(Drink drink, List<Coin> coins) {
         int rest;
         if (!this.compartments.containsKey(drink.getName())) {
@@ -59,7 +79,7 @@ public class DrinkAutomat extends Automat {
 
         rest = getCoinSum(coins) - (int) Math.round(this.compartments.get(drink.getName()).getCommon().getPrice() * 100);
 
-        List<CoinAndQuantity> restCoinToGiveBack = changeCoin(rest);
+        final List<CoinAndQuantity> restCoinToGiveBack = changeCoin(rest);
 
         if (this.getSumAvailableChangeCoins(restCoinToGiveBack) < rest) {
 
@@ -75,47 +95,57 @@ public class DrinkAutomat extends Automat {
         return new DrinkAndChange(drink, restCoinToGiveBack);
     }
 
-    public List<CoinAndQuantity> changeCoin(int sum) {
-        CoinAndQuantity tmpCoinToReturn;
-        CoinAndQuantity tmpCoin;
-        int tmpRest = sum;
+    /**
+     * This method takes the sum of the entered coins and returns a coin change list.
+     *
+     * @param inputSum: Is the sum of input coin.
+     * @return A list of change coins.
+     */
+    public List<CoinAndQuantity> changeCoin(final int inputSum) {
+        CoinAndQuantity tmpCoinAndToReturn;
+        CoinAndQuantity availableCoinWithTypeOfCoin;
+        int currentRest = inputSum;
 
         Collections.sort(this.availableCoinForChange);
 
         if (this.availableCoinForChange.stream().findFirst().isPresent()) ;
 
-        int tmpMinCoinTypeValue = this.availableCoinForChange.stream().findFirst().get().getType().getCoinType();
+        int tmpMinCoinTypeValue = this.availableCoinForChange.stream().findFirst().get().getType().getValue();
 
         do {
             for (int i = this.availableCoinForChange.size() - 1; i >= 0; i--) {
 
-                tmpCoin = this.availableCoinForChange.get(i);
+                availableCoinWithTypeOfCoin = this.availableCoinForChange.get(i);
 
-                int tmpNumber = tmpCoin.getType().getCoinType();
+                int currentCoinNumber = availableCoinWithTypeOfCoin.getType().getValue();
 
-                int tmpPart = tmpRest / tmpNumber;
+                int wholePart = currentRest / currentCoinNumber;
 
-                if (tmpPart > 0 && tmpCoin.getQuantity() != 0) {
+                if (wholePart > 0 && availableCoinWithTypeOfCoin.getQuantity() != 0) {
 
-                    if (tmpPart > tmpCoin.getQuantity()) {
+                    if (wholePart > availableCoinWithTypeOfCoin.getQuantity()) {
 
-                        tmpCoinToReturn = new CoinAndQuantity(tmpCoin.getType(), tmpCoin.getQuantity());
+                        tmpCoinAndToReturn = new CoinAndQuantity(availableCoinWithTypeOfCoin.getType(), availableCoinWithTypeOfCoin.getQuantity());
 
                     } else {
 
-                        tmpCoinToReturn = new CoinAndQuantity(tmpCoin.getType(), tmpPart);
+                        tmpCoinAndToReturn = new CoinAndQuantity(availableCoinWithTypeOfCoin.getType(), wholePart);
                     }
-                    this.returnMoney.add(tmpCoinToReturn);
+                    this.returnMoney.add(tmpCoinAndToReturn);
                 }
-                System.out.println(tmpRest);
-                tmpRest = tmpRest - tmpPart * tmpNumber;
+
+                currentRest = currentRest - wholePart * currentCoinNumber;
+
                 this.updateAvailableCoinForChange();
             }
         }
-        while (tmpRest >= tmpMinCoinTypeValue && tmpRest > 0);
+        while (currentRest >= tmpMinCoinTypeValue && currentRest > 0);
         return returnMoney;
     }
 
+    /**
+     * Remove coins with the quantity zero
+     */
     public void updateAvailableCoinForChange() {
 
         for (int i = this.availableCoinForChange.size() - 1; i >= 0; i--) {
@@ -133,45 +163,40 @@ public class DrinkAutomat extends Automat {
 
     }
 
+    /**
+     * @param coinAndQuantities contain each available coin for change and his quantity.
+     * @return sum of all coins value.
+     */
     public int getSumAvailableChangeCoins(List<CoinAndQuantity> coinAndQuantities) {
 
         int tmpSum = 0;
 
         for (CoinAndQuantity coinAndQuantity : coinAndQuantities) {
 
-            tmpSum += coinAndQuantity.type.getCoinType() * coinAndQuantity.getQuantity();
-
+            tmpSum += coinAndQuantity.type.getValue() * coinAndQuantity.getQuantity();
         }
-
         return tmpSum;
     }
 
     /**
-     * Fill coins for change in the machine
+     * This method fill change coins in the machine
+     *
+     * @param coinsToFillIn
      */
     public void fillInWithCoin(List<Coin> coinsToFillIn) {
 
-        CoinAndQuantity tmpCoinAndQuantity;
-        int tmpIndex;
+        CoinAndQuantity availableCoinWithTypeOfCoin;
 
-        for (Coin coinType : coinsToFillIn) {
+        for (Coin coin : coinsToFillIn) {
 
-            if (!this.availableCoinForChange.contains(coinType)) {
+            availableCoinWithTypeOfCoin = this.getCoinAndQuantityByType(coin.coinValue);
 
-                this.availableCoinForChange.add(new CoinAndQuantity(coinType, 1));
+            if (availableCoinWithTypeOfCoin == null) {
+
+                this.availableCoinForChange.add(new CoinAndQuantity(coin.coinValue, 1));
 
             } else {
-
-                tmpIndex = this.availableCoinForChange.indexOf(coinType);
-
-                if (tmpIndex != -1) {
-
-                    tmpCoinAndQuantity = this.availableCoinForChange.get(tmpIndex);
-
-                    tmpCoinAndQuantity.setQuantity(tmpCoinAndQuantity.quantity + 1);
-
-                    this.availableCoinForChange.set(tmpIndex, tmpCoinAndQuantity);
-                }
+                availableCoinWithTypeOfCoin.setQuantity(availableCoinWithTypeOfCoin.quantity + 1);
             }
         }
     }
@@ -182,66 +207,81 @@ public class DrinkAutomat extends Automat {
 
     }
 
+    /**
+     * This method removes input coins from the available change coins list.
+     *
+     * @param inputCoins the coin  giving from the user.
+     */
     public void fillOutInputCoin(List<Coin> inputCoins) {
 
-        CoinAndQuantity tmpCoinAndQuantity;
+        CoinAndQuantity availableCoinWithTypeOfCoin;
         int tmpIndex;
 
-        for (Coin coinType : inputCoins) {
+        for (Coin coin : inputCoins) {
 
-            if (this.availableCoinForChange.contains(coinType)) {
+            availableCoinWithTypeOfCoin = this.getCoinAndQuantityByType(coin.coinValue);
 
-                tmpIndex = this.availableCoinForChange.indexOf(coinType);
+            if (availableCoinWithTypeOfCoin != null) {
 
-                if (tmpIndex != -1) {
+                int updatedQuantity = availableCoinWithTypeOfCoin.quantity - 1;
 
-                    tmpCoinAndQuantity = this.availableCoinForChange.get(tmpIndex);
+                if (updatedQuantity == 0) {
 
-                    int tmpCoinQuantity = tmpCoinAndQuantity.quantity - 1;
+                    this.availableCoinForChange.remove(availableCoinWithTypeOfCoin);
+                }
 
-                    if (tmpCoinQuantity == 0) {
+                availableCoinWithTypeOfCoin.setQuantity(updatedQuantity);
 
-                        this.availableCoinForChange.remove(tmpIndex);
+            }
+        }
+    }
 
-                    }
+    /**
+     * This method removes changes coins in save before delivering the order.
+     * This occurs when the machine releases the remaining coins to the current user.
+     *
+     * @param restCoinToGiveBack is a list of change coins to give back to the current user.
+     */
+    public void fillOut(List<CoinAndQuantity> restCoinToGiveBack) {
 
-                    tmpCoinAndQuantity.setQuantity(tmpCoinQuantity);
+        CoinAndQuantity availableCoinWithTypeOfCoin;
 
-                    this.availableCoinForChange.set(tmpIndex, tmpCoinAndQuantity);
+        for (CoinAndQuantity coin : restCoinToGiveBack) {
+
+            availableCoinWithTypeOfCoin = this.getCoinAndQuantityByType(coin.type);
+
+            if (availableCoinWithTypeOfCoin != null) {
+
+                int updatedQuantity = availableCoinWithTypeOfCoin.getQuantity() - coin.quantity;
+
+                if (updatedQuantity == 0) {
+
+                    this.availableCoinForChange.remove(availableCoinWithTypeOfCoin);
+
+                } else {
+
+                    availableCoinWithTypeOfCoin.setQuantity(updatedQuantity);
+
                 }
             }
         }
     }
 
     /**
-     * Remove changes coin
+     * The method returns CoinAndQuantity object of available coin for change list by given coin value.
+     *
+     * @param coinValue to find.
+     * @return founded CoinAndQuantity object
      */
-    public void fillOut(List<CoinAndQuantity> restCoinToGiveBack) {
+    private CoinAndQuantity getCoinAndQuantityByType(final CoinValue coinValue) {
 
-        CoinAndQuantity tmpCoinAndQuantity;
-        int tmpIndex;
+        for (CoinAndQuantity coinAndQuantity : this.availableCoinForChange) {
 
-        for (CoinAndQuantity coin : restCoinToGiveBack) {
+            if (coinAndQuantity.type.equals(coinValue)) {
 
-            tmpIndex = this.availableCoinForChange.indexOf(coin.type);
-
-            if (tmpIndex != -1) {
-
-                tmpCoinAndQuantity = this.availableCoinForChange.get(tmpIndex);
-
-                int tmpCoinQuantity = tmpCoinAndQuantity.getQuantity() - coin.quantity;
-
-                if (tmpCoinQuantity == 0) {
-
-                    this.availableCoinForChange.remove(tmpIndex);
-
-                } else {
-
-                    tmpCoinAndQuantity.setQuantity(tmpCoinQuantity);
-
-                    this.availableCoinForChange.set(tmpIndex, tmpCoinAndQuantity);
-                }
+                return coinAndQuantity;
             }
         }
+        return null;
     }
 }

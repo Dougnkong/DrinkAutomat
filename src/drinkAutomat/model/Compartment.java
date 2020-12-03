@@ -2,6 +2,11 @@ package drinkAutomat.model;
 
 import drinkAutomat.common.ProductType;
 
+/**
+ * Generic class for compartment in the drink machine.
+ * Each compartment will take the name of specific drink.
+ * @param <T>
+ */
 public class Compartment<T extends ProductType> {
 
     private T common;

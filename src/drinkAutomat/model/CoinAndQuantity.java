@@ -1,13 +1,20 @@
 package drinkAutomat.model;
 
-import drinkAutomat.common.Coin;
+import drinkAutomat.common.CoinValue;
 
+/**
+ * This class is used to store change coins.
+ */
 public class CoinAndQuantity implements Comparable<CoinAndQuantity> {
 
-    protected Coin type;
+    protected CoinValue type;
     protected int quantity;
 
-    public CoinAndQuantity(Coin coin, int quantity) {
+    /**
+     * @param coin
+     * @param quantity gives the number of coins for type coin
+     */
+    public CoinAndQuantity(CoinValue coin, int quantity) {
 
         this.type = coin;
         this.quantity = quantity;
@@ -25,7 +32,7 @@ public class CoinAndQuantity implements Comparable<CoinAndQuantity> {
         this.quantity -= quantity;
     }
 
-    public Coin getType() {
+    public CoinValue getType() {
         return type;
     }
 
@@ -34,6 +41,6 @@ public class CoinAndQuantity implements Comparable<CoinAndQuantity> {
 
         CoinAndQuantity f = (CoinAndQuantity) o;
 
-        return this.type.getCoinType() - f.type.getCoinType();
+        return this.type.getValue() - f.type.getValue();
     }
 }
