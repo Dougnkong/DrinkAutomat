@@ -1,6 +1,6 @@
-package drinkAutomat.model;
+package main.drinkautomat.model;
 
-import drinkAutomat.common.ProductType;
+import main.drinkautomat.common.ProductType;
 
 /**
  * Generic class for compartment in the drink machine.

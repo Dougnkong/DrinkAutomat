@@ -1,4 +1,4 @@
-package drinkAutomat.common;
+package main.drinkautomat.common;
 
 public class Drink extends ProductType {
     public Drink(String name, double price) {

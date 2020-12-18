@@ -1,8 +1,8 @@
-package drinkAutomatTest;
+package main.drinkautomatTest;
 
-import drinkAutomat.common.CoinValue;
-import drinkAutomat.common.Drink;
-import drinkAutomat.model.*;
+import main.drinkautomat.common.CoinValue;
+import main.drinkautomat.common.Drink;
+import main.drinkautomat.model.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -15,11 +15,11 @@ import static org.junit.jupiter.api.Assertions.*;
 public class testDrinkAutomat {
 
     public static final String COLA = "Cola";
-    public static final String BIER = "Bier";
+    public static final String BEER = "Beer";
     Drink cola;
-    Drink bier;
+    Drink beer;
     Compartment<Drink> colaCompartment;
-    Compartment<Drink> bierCompartment;
+    Compartment<Drink> beerCompartment;
     HashMap<String, Compartment> compartments;
 
 
@@ -30,12 +30,12 @@ public class testDrinkAutomat {
     @BeforeEach
     private void init() {
         cola = new Drink(COLA, 1.20);
-        bier = new Drink(BIER, 2);
+        beer = new Drink(BEER, 2);
         colaCompartment = new Compartment<>(cola, 2);
-        bierCompartment = new Compartment<>(bier, 2);
+        beerCompartment = new Compartment<>(beer, 2);
         compartments = new HashMap<>();
         compartments.put(cola.getName(), colaCompartment);
-        compartments.put(bier.getName(), bierCompartment);
+        compartments.put(beer.getName(), beerCompartment);
     }
 
     /**
@@ -44,7 +44,7 @@ public class testDrinkAutomat {
      */
     @Test
     public void testReturnDrink() {
-        DrinkAutomat drinkAutomat = new DrinkAutomat(compartments);
+        DrinkMachine drinkAutomat = new DrinkMachine(compartments);
         List<Coin> inputCoins = new ArrayList<>();
         inputCoins.add(new Coin(CoinValue.FIFTY_CENT));
         inputCoins.add(new Coin(CoinValue.FIFTY_CENT));
@@ -57,9 +57,9 @@ public class testDrinkAutomat {
         drinkAutomat.addAvailableCoinForChange(coin_20);
         drinkAutomat.addAvailableCoinForChange(coin_50);
 
-        DrinkAndChange drinkAndChange = drinkAutomat.buy(bier, inputCoins);
+        DrinkAndChange drinkAndChange = drinkAutomat.buy(beer, inputCoins);
 
-        assertEquals(bier.getName(), drinkAndChange.getDrinkName());
+        assertEquals(beer.getName(), drinkAndChange.getDrinkName());
         assertEquals(0, drinkAndChange.getChange().size());
 
 
@@ -76,7 +76,7 @@ public class testDrinkAutomat {
         List<Coin> inputCoins = new ArrayList<>();
         inputCoins.add(new Coin(CoinValue.TWO_EURO));
 
-        DrinkAutomat drinkAutomat = new DrinkAutomat(compartments);
+        DrinkMachine drinkMachine = new DrinkMachine(compartments);
 
         /**
          * Set coins for change
@@ -84,20 +84,20 @@ public class testDrinkAutomat {
         CoinAndQuantity coin_50 = new CoinAndQuantity(CoinValue.FIFTY_CENT, 1);
         CoinAndQuantity coin_20 = new CoinAndQuantity(CoinValue.TWENTY_CENT, 4);
         CoinAndQuantity coin_10 = new CoinAndQuantity(CoinValue.TEN_CENT, 8);
-        drinkAutomat.addAvailableCoinForChange(coin_10);
-        drinkAutomat.addAvailableCoinForChange(coin_20);
-        drinkAutomat.addAvailableCoinForChange(coin_50);
+        drinkMachine.addAvailableCoinForChange(coin_10);
+        drinkMachine.addAvailableCoinForChange(coin_20);
+        drinkMachine.addAvailableCoinForChange(coin_50);
 
-        DrinkAndChange drinkAndChange = drinkAutomat.buy(cola, inputCoins);
+        DrinkAndChange drinkAndChange = drinkMachine.buy(cola, inputCoins);
 
         assertEquals(cola.getName(), drinkAndChange.getDrinkName());
         assertEquals(1, drinkAndChange.getChange().get(CoinValue.FIFTY_CENT));
         assertEquals(1, drinkAndChange.getChange().get(CoinValue.TWENTY_CENT));
         assertEquals(1, drinkAndChange.getChange().get(CoinValue.TEN_CENT));
 
-        assertEquals(3, drinkAutomat.getAvailableCoinForChange().size());
+        assertEquals(3, drinkMachine.getAvailableCoinForChange().size());
 
-        for (CoinAndQuantity coinAndQuantity : drinkAutomat.getAvailableCoinForChange()) {
+        for (CoinAndQuantity coinAndQuantity : drinkMachine.getAvailableCoinForChange()) {
             assertNotEquals(CoinValue.FIFTY_CENT, coinAndQuantity.getType());
         }
     }
@@ -114,9 +114,9 @@ public class testDrinkAutomat {
         List<Coin> inputCoins = new ArrayList<>();
         inputCoins.add(new Coin(CoinValue.TWO_EURO));
 
-        DrinkAutomat drinkAutomat = new DrinkAutomat(compartments);
+        DrinkMachine drinkMachine = new DrinkMachine(compartments);
 
-        DrinkAndChange drinkAndChange = drinkAutomat.buy(cola, inputCoins);
+        DrinkAndChange drinkAndChange = drinkMachine.buy(cola, inputCoins);
         assertNull(drinkAndChange);
     }
 
@@ -129,9 +129,9 @@ public class testDrinkAutomat {
         List<Coin> inputCoins = new ArrayList<>();
         inputCoins.add(new Coin(CoinValue.ONE_EURO));
 
-        DrinkAutomat drinkAutomat = new DrinkAutomat(compartments);
+        DrinkMachine drinkMachine = new DrinkMachine(compartments);
 
-        DrinkAndChange result = drinkAutomat.buy(cola, inputCoins);
+        DrinkAndChange result = drinkMachine.buy(cola, inputCoins);
 
         assertNull(result);
     }
@@ -147,14 +147,14 @@ public class testDrinkAutomat {
 
         inputCoins.add(new Coin(CoinValue.TEN_CENT));
 
-        DrinkAutomat drinkAutomat = new DrinkAutomat(compartments);
+        DrinkMachine drinkMachine = new DrinkMachine(compartments);
 
-        assertEquals(0, drinkAutomat.getAvailableCoinForChange().size());
+        assertEquals(0, drinkMachine.getAvailableCoinForChange().size());
 
-        drinkAutomat.fillInWithCoin(inputCoins);
+        drinkMachine.fillInWithCoin(inputCoins);
 
-        assertEquals(1, drinkAutomat.getAvailableCoinForChange().size());
+        assertEquals(1, drinkMachine.getAvailableCoinForChange().size());
 
-        assertEquals(CoinValue.TEN_CENT, drinkAutomat.getAvailableCoinForChange().get(0).getType());
+        assertEquals(CoinValue.TEN_CENT, drinkMachine.getAvailableCoinForChange().get(0).getType());
     }
 }

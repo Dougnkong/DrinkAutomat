@@ -7,5 +7,5 @@
 	All tools with which you can execute Java code. 
 
 ## How to test the Project
-	The entire tests can be found in the class testDrinkAutomat in folder ../drinkAutomat/src/drinkAutomatTest/testDrinkAutomat.java. 
+	The entire tests can be found in the class testDrinkAutomat in folder ../main.drinkautomat/src/main.drinkautomatTest/testDrinkAutomat.java.
 	When you run this class, all tests are run automatically. Explanations for each test can be found in the test itself.

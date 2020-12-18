@@ -1,8 +1,8 @@
-package drinkAutomat.model;
+package main.drinkautomat.model;
 
-import drinkAutomat.common.Automat;
-import drinkAutomat.common.CoinValue;
-import drinkAutomat.common.Drink;
+import main.drinkautomat.common.Automat;
+import main.drinkautomat.common.CoinValue;
+import main.drinkautomat.common.Drink;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -13,9 +13,9 @@ import java.util.List;
 /**
  * This class is an implementation of a drink machine, with the principal procedure.
  */
-public class DrinkAutomat extends Automat {
+public class DrinkMachine extends Automat {
     public static final String NOT_MORE_AVAILABLE = "The drink name you choose is not more available";
-    public static final String NOT_ENOUGH_MONEY = "You do not given enough coins for the drink you need.";
+    public static final String NOT_ENOUGH_MONEY = "You have not given enough coins for the drink you need.";
     public static final String NOT_ENOUGH_COINS_FOR_CHANGE = "Not enough coins for change";
 
     HashMap<String, Compartment> compartments;
@@ -25,7 +25,7 @@ public class DrinkAutomat extends Automat {
     /**
      * @param compartments: Each compartment contents only one drink type.
      */
-    public DrinkAutomat(HashMap<String, Compartment> compartments) {
+    public DrinkMachine(HashMap<String, Compartment> compartments) {
         this.returnMoney = new ArrayList<>();
         this.availableCoinForChange = new ArrayList<>();
         this.compartments = compartments;
