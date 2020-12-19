@@ -1,7 +1,7 @@
-package main.drinkautomat.model;
+package model;
 
-import main.drinkautomat.common.CoinValue;
-import main.drinkautomat.common.Drink;
+import common.CoinValue;
+import common.Drink;
 
 import java.util.HashMap;
 import java.util.List;

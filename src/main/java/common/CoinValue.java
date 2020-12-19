@@ -1,4 +1,4 @@
-package main.drinkautomat.common;
+package common;
 
 /**
  * The coin is initialised in cents.

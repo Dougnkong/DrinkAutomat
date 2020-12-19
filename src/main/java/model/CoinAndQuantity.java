@@ -1,6 +1,6 @@
-package main.drinkautomat.model;
+package model;
 
-import main.drinkautomat.common.CoinValue;
+import common.CoinValue;
 
 /**
  * This class is used to store change coins.
