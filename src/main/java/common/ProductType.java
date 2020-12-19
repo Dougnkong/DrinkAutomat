@@ -1,4 +1,4 @@
-package main.drinkautomat.common;
+package common;
 
 public abstract class ProductType {
     protected String name;

@@ -1,7 +1,7 @@
-package main.drinkautomat.common;
+package common;
 
-import main.drinkautomat.model.Coin;
-import main.drinkautomat.model.CoinAndQuantity;
+import model.Coin;
+import model.CoinAndQuantity;
 
 import java.util.List;
 

@@ -1,6 +1,6 @@
-package main.drinkautomat.model;
+package model;
 
-import main.drinkautomat.common.CoinValue;
+import common.CoinValue;
 
 public class Coin {
 

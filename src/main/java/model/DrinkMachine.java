@@ -1,8 +1,8 @@
-package main.drinkautomat.model;
+package model;
 
-import main.drinkautomat.common.Automat;
-import main.drinkautomat.common.CoinValue;
-import main.drinkautomat.common.Drink;
+import common.Automat;
+import common.CoinValue;
+import common.Drink;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -29,27 +29,6 @@ public class DrinkMachine extends Automat {
         this.returnMoney = new ArrayList<>();
         this.availableCoinForChange = new ArrayList<>();
         this.compartments = compartments;
-    }
-
-    private int getCoinSum(final List<Coin> coins) {
-        int sumCoin = 0;
-
-        for (Coin coin : coins) {
-            sumCoin += coin.getCoinValue().getValue();
-        }
-
-        return sumCoin;
-    }
-
-    /**
-     * @param drink
-     * @param coins
-     * @return Price bigger than given coins (=true) false else.
-     */
-    private boolean isNotEnoughCoinsGiven(Drink drink, final List<Coin> coins) {
-
-        return drink.getPrice() * 100 > getCoinSum(coins);
-
     }
 
     /**
@@ -283,5 +262,26 @@ public class DrinkMachine extends Automat {
             }
         }
         return null;
+    }
+
+    private int getCoinSum(final List<Coin> coins) {
+        int sumCoin = 0;
+
+        for (Coin coin : coins) {
+            sumCoin += coin.getCoinValue().getValue();
+        }
+
+        return sumCoin;
+    }
+
+    /**
+     * @param drink
+     * @param coins
+     * @return Price bigger than given coins (=true) false else.
+     */
+    private boolean isNotEnoughCoinsGiven(Drink drink, final List<Coin> coins) {
+
+        return drink.getPrice() * 100 > getCoinSum(coins);
+
     }
 }
