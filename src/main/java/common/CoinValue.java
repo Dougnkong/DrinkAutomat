@@ -12,12 +12,11 @@ public enum CoinValue {
 
     private final int coinValue;
 
-    CoinValue(int value) {
-        this.coinValue = value;
-    }
-
     public int getValue() {
         return this.coinValue;
     }
 
+    CoinValue(int value) {
+        this.coinValue = value;
+    }
 }

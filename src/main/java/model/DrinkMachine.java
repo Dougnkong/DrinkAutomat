@@ -31,27 +31,6 @@ public class DrinkMachine extends Automat {
         this.compartments = compartments;
     }
 
-    private int getCoinSum(final List<Coin> coins) {
-        int sumCoin = 0;
-
-        for (Coin coin : coins) {
-            sumCoin += coin.getCoinValue().getValue();
-        }
-
-        return sumCoin;
-    }
-
-    /**
-     * @param drink
-     * @param coins
-     * @return Price bigger than given coins (=true) false else.
-     */
-    private boolean isNotEnoughCoinsGiven(Drink drink, final List<Coin> coins) {
-
-        return drink.getPrice() * 100 > getCoinSum(coins);
-
-    }
-
     /**
      * This method manages the purchase process and in the best case returns
      * an object containing the order and the exchange coin.
@@ -283,5 +262,26 @@ public class DrinkMachine extends Automat {
             }
         }
         return null;
+    }
+
+    private int getCoinSum(final List<Coin> coins) {
+        int sumCoin = 0;
+
+        for (Coin coin : coins) {
+            sumCoin += coin.getCoinValue().getValue();
+        }
+
+        return sumCoin;
+    }
+
+    /**
+     * @param drink
+     * @param coins
+     * @return Price bigger than given coins (=true) false else.
+     */
+    private boolean isNotEnoughCoinsGiven(Drink drink, final List<Coin> coins) {
+
+        return drink.getPrice() * 100 > getCoinSum(coins);
+
     }
 }
