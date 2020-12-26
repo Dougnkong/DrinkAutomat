@@ -1,11 +1,11 @@
-package common;
+package com.interfaces_and_enum;
 
-import model.Coin;
-import model.CoinAndQuantity;
+import com.model.Coin;
+import com.model.CoinAndQuantity;
 
 import java.util.List;
 
-public abstract class Automat {
+public abstract class AbstractAutomat {
 
     protected abstract void fillInWithCoin(List<Coin> coins);
 

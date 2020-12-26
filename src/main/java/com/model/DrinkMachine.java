@@ -1,8 +1,7 @@
-package model;
+package com.model;
 
-import common.Automat;
-import common.CoinValue;
-import common.Drink;
+import com.interfaces_and_enum.AbstractAutomat;
+import com.interfaces_and_enum.EnumCoinValue;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -13,14 +12,16 @@ import java.util.List;
 /**
  * This class is an implementation of a drink machine, with the principal procedure.
  */
-public class DrinkMachine extends Automat {
+public class DrinkMachine extends AbstractAutomat {
     public static final String NOT_MORE_AVAILABLE = "The drink name you choose is not more available";
     public static final String NOT_ENOUGH_MONEY = "You have not given enough coins for the drink you need.";
     public static final String NOT_ENOUGH_COINS_FOR_CHANGE = "Not enough coins for change";
 
+
     HashMap<String, Compartment> compartments;
     List<CoinAndQuantity> availableCoinForChange;
     List<CoinAndQuantity> returnMoney;
+
 
     /**
      * @param compartments: Each compartment contents only one drink type.
@@ -31,13 +32,16 @@ public class DrinkMachine extends Automat {
         this.compartments = compartments;
     }
 
+    public DrinkMachine() {
+    }
+
     /**
      * This method manages the purchase process and in the best case returns
      * an object containing the order and the exchange coin.
      *
-     * @param drink: Contains the drink the user choose.
-     * @param coins: Contains the list of coins given for the user.
-     * @return if success the user's oder.
+     * @param drink: Contains the drink the com.user choose.
+     * @param coins: Contains the list of coins given for the com.user.
+     * @return if success the com.user's oder.
      */
     public DrinkAndChange buy(Drink drink, List<Coin> coins) {
         int rest;
@@ -181,15 +185,17 @@ public class DrinkMachine extends Automat {
     }
 
     public List<CoinAndQuantity> getAvailableCoinForChange() {
-
         return availableCoinForChange;
+    }
 
+    public HashMap<String, Compartment> getCompartments() {
+        return compartments;
     }
 
     /**
      * This method removes input coins from the available change coins list.
      *
-     * @param inputCoins the coin  giving from the user.
+     * @param inputCoins the coin  giving from the com.user.
      */
     public void fillOutInputCoin(List<Coin> inputCoins) {
 
@@ -217,9 +223,9 @@ public class DrinkMachine extends Automat {
 
     /**
      * This method removes changes coins in save before delivering the order.
-     * This occurs when the machine releases the remaining coins to the current user.
+     * This occurs when the machine releases the remaining coins to the current com.user.
      *
-     * @param restCoinToGiveBack is a list of change coins to give back to the current user.
+     * @param restCoinToGiveBack is a list of change coins to give back to the current com.user.
      */
     public void fillOut(List<CoinAndQuantity> restCoinToGiveBack) {
 
@@ -252,7 +258,7 @@ public class DrinkMachine extends Automat {
      * @param coinValue to find.
      * @return founded CoinAndQuantity object
      */
-    private CoinAndQuantity getCoinAndQuantityByType(final CoinValue coinValue) {
+    private CoinAndQuantity getCoinAndQuantityByType(final EnumCoinValue coinValue) {
 
         for (CoinAndQuantity coinAndQuantity : this.availableCoinForChange) {
 

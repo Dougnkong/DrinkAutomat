@@ -1,9 +1,9 @@
-package common;
+package com.interfaces_and_enum;
 
 /**
  * The coin is initialised in cents.
  */
-public enum CoinValue {
+public enum EnumCoinValue {
     ONE_EURO(100),
     TWO_EURO(200),
     FIFTY_CENT(50),
@@ -16,7 +16,7 @@ public enum CoinValue {
         return this.coinValue;
     }
 
-    CoinValue(int value) {
+    EnumCoinValue(int value) {
         this.coinValue = value;
     }
 }

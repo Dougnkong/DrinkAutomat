@@ -1,7 +1,6 @@
 
-import common.CoinValue;
-import common.Drink;
-import model.*;
+import com.interfaces_and_enum.EnumCoinValue;
+import com.model.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -28,8 +27,8 @@ public class TestDrinkMachine {
      */
     @BeforeEach
     public void init() {
-        cola = new Drink(COLA, 1.20);
-        beer = new Drink(BEER, 2);
+        cola = new Drink(00, COLA, 1.20);
+        beer = new Drink(01, BEER, 2);
         colaCompartment = new Compartment<>(cola, 2);
         beerCompartment = new Compartment<>(beer, 2);
         compartments = new HashMap<>();
@@ -38,7 +37,7 @@ public class TestDrinkMachine {
     }
 
     /**
-     * A user orders a beer and gives exactly three coins (50, 50 and 1 euros).
+     * A com.user orders a beer and gives exactly three coins (50, 50 and 1 euros).
      * The test checks if he gets exactly one beer and no change, because he gave exactly 2 euros.
      */
     @Test
@@ -46,13 +45,13 @@ public class TestDrinkMachine {
         init();
         DrinkMachine drinkMachine = new DrinkMachine(compartments);
         List<Coin> inputCoins = new ArrayList<>();
-        inputCoins.add(new Coin(CoinValue.FIFTY_CENT));
-        inputCoins.add(new Coin(CoinValue.FIFTY_CENT));
-        inputCoins.add(new Coin(CoinValue.ONE_EURO));
+        inputCoins.add(new Coin(EnumCoinValue.FIFTY_CENT));
+        inputCoins.add(new Coin(EnumCoinValue.FIFTY_CENT));
+        inputCoins.add(new Coin(EnumCoinValue.ONE_EURO));
 
-        CoinAndQuantity coin_50 = new CoinAndQuantity(CoinValue.FIFTY_CENT, 6);
-        CoinAndQuantity coin_20 = new CoinAndQuantity(CoinValue.TWENTY_CENT, 2);
-        CoinAndQuantity coin_10 = new CoinAndQuantity(CoinValue.TEN_CENT, 2);
+        CoinAndQuantity coin_50 = new CoinAndQuantity(EnumCoinValue.FIFTY_CENT, 6);
+        CoinAndQuantity coin_20 = new CoinAndQuantity(EnumCoinValue.TWENTY_CENT, 2);
+        CoinAndQuantity coin_10 = new CoinAndQuantity(EnumCoinValue.TEN_CENT, 2);
         drinkMachine.addAvailableCoinForChange(coin_10);
         drinkMachine.addAvailableCoinForChange(coin_20);
         drinkMachine.addAvailableCoinForChange(coin_50);
@@ -66,7 +65,7 @@ public class TestDrinkMachine {
     }
 
     /**
-     * A user ordered a cola and gives 2 euro. The cola cost is 1.20 euro. The rest will be 80 cent.
+     * A com.user ordered a cola and gives 2 euro. The cola cost is 1.20 euro. The rest will be 80 cent.
      * Test if the machine gives back a cola and the following coins 1x50 cent, 1x20 cent and 1x10 cent.
      * Test further to see if there are no more 50 cents in the reserve, and also shows that
      * the 2 euro is now also in the reserve.
@@ -75,16 +74,16 @@ public class TestDrinkMachine {
     public void testReturnChange() {
         init();
         List<Coin> inputCoins = new ArrayList<>();
-        inputCoins.add(new Coin(CoinValue.TWO_EURO));
+        inputCoins.add(new Coin(EnumCoinValue.TWO_EURO));
 
         DrinkMachine drinkMachine = new DrinkMachine(compartments);
 
         /**
          * Set coins for change
          */
-        CoinAndQuantity coin_50 = new CoinAndQuantity(CoinValue.FIFTY_CENT, 1);
-        CoinAndQuantity coin_20 = new CoinAndQuantity(CoinValue.TWENTY_CENT, 4);
-        CoinAndQuantity coin_10 = new CoinAndQuantity(CoinValue.TEN_CENT, 8);
+        CoinAndQuantity coin_50 = new CoinAndQuantity(EnumCoinValue.FIFTY_CENT, 1);
+        CoinAndQuantity coin_20 = new CoinAndQuantity(EnumCoinValue.TWENTY_CENT, 4);
+        CoinAndQuantity coin_10 = new CoinAndQuantity(EnumCoinValue.TEN_CENT, 8);
         drinkMachine.addAvailableCoinForChange(coin_10);
         drinkMachine.addAvailableCoinForChange(coin_20);
         drinkMachine.addAvailableCoinForChange(coin_50);
@@ -92,19 +91,19 @@ public class TestDrinkMachine {
         DrinkAndChange drinkAndChange = drinkMachine.buy(cola, inputCoins);
 
         assertEquals(cola.getName(), drinkAndChange.getDrinkName());
-        assertEquals(1, drinkAndChange.getChange().get(CoinValue.FIFTY_CENT));
-        assertEquals(1, drinkAndChange.getChange().get(CoinValue.TWENTY_CENT));
-        assertEquals(1, drinkAndChange.getChange().get(CoinValue.TEN_CENT));
+        assertEquals(1, drinkAndChange.getChange().get(EnumCoinValue.FIFTY_CENT));
+        assertEquals(1, drinkAndChange.getChange().get(EnumCoinValue.TWENTY_CENT));
+        assertEquals(1, drinkAndChange.getChange().get(EnumCoinValue.TEN_CENT));
 
         assertEquals(3, drinkMachine.getAvailableCoinForChange().size());
 
         for (CoinAndQuantity coinAndQuantity : drinkMachine.getAvailableCoinForChange()) {
-            assertNotEquals(CoinValue.FIFTY_CENT, coinAndQuantity.getType());
+            assertNotEquals(EnumCoinValue.FIFTY_CENT, coinAndQuantity.getType());
         }
     }
 
     /**
-     * A user orders a cola. As the ordered drink is no longer available,
+     * A com.user orders a cola. As the ordered drink is no longer available,
      * the purchase is not made. This test checks or no cola is given.
      */
     @Test
@@ -113,7 +112,7 @@ public class TestDrinkMachine {
         HashMap<String, Compartment> compartments = new HashMap<>();
 
         List<Coin> inputCoins = new ArrayList<>();
-        inputCoins.add(new Coin(CoinValue.TWO_EURO));
+        inputCoins.add(new Coin(EnumCoinValue.TWO_EURO));
 
         DrinkMachine drinkMachine = new DrinkMachine(compartments);
 
@@ -122,14 +121,14 @@ public class TestDrinkMachine {
     }
 
     /**
-     * A user orders a cola and gives 2 euros. But a cola costs 1.20 euro.
+     * A com.user orders a cola and gives 2 euros. But a cola costs 1.20 euro.
      * As the machine has no more change he should not place the order.
      */
     @Test
     public void testNotEnoughCoinForDrink() {
         init();
         List<Coin> inputCoins = new ArrayList<>();
-        inputCoins.add(new Coin(CoinValue.ONE_EURO));
+        inputCoins.add(new Coin(EnumCoinValue.ONE_EURO));
 
         DrinkMachine drinkMachine = new DrinkMachine(compartments);
 
@@ -148,7 +147,7 @@ public class TestDrinkMachine {
         init();
         List<Coin> inputCoins = new ArrayList<>();
 
-        inputCoins.add(new Coin(CoinValue.TEN_CENT));
+        inputCoins.add(new Coin(EnumCoinValue.TEN_CENT));
 
         DrinkMachine drinkMachine = new DrinkMachine(compartments);
 
@@ -158,6 +157,6 @@ public class TestDrinkMachine {
 
         assertEquals(1, drinkMachine.getAvailableCoinForChange().size());
 
-        assertEquals(CoinValue.TEN_CENT, drinkMachine.getAvailableCoinForChange().get(0).getType());
+        assertEquals(EnumCoinValue.TEN_CENT, drinkMachine.getAvailableCoinForChange().get(0).getType());
     }
 }

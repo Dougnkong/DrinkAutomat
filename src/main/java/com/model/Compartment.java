@@ -1,6 +1,6 @@
-package model;
+package com.model;
 
-import common.ProductType;
+import com.interfaces_and_enum.AbstractProductType;
 
 /**
  * Generic class for compartment in the drink machine.
@@ -8,7 +8,7 @@ import common.ProductType;
  *
  * @param <T>
  */
-public class Compartment<T extends ProductType> {
+public class Compartment<T extends AbstractProductType> {
 
     private T common;
     int quantity;

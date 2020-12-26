@@ -1,6 +1,13 @@
-package common;
+package com.interfaces_and_enum;
 
-public abstract class ProductType {
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import java.util.Objects;
+
+import static javax.persistence.GenerationType.*;
+
+public abstract class AbstractProductType {
     protected String name;
     protected double price;
 
@@ -8,9 +15,12 @@ public abstract class ProductType {
      * @param name  general name for drink product.
      * @param price general price of drink.
      */
-    public ProductType(String name, double price) {
+    public AbstractProductType(String name, double price) {
         this.name = name;
         this.price = price;
+    }
+
+    public AbstractProductType() {
     }
 
     public double getPrice() {

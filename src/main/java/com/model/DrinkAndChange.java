@@ -1,17 +1,16 @@
-package model;
+package com.model;
 
-import common.CoinValue;
-import common.Drink;
+import com.interfaces_and_enum.EnumCoinValue;
 
 import java.util.HashMap;
 import java.util.List;
 
 /**
- * This is used to return the drink and the change for the user.
+ * This is used to return the drink and the change for the com.user.
  */
 public class DrinkAndChange {
 
-    HashMap<CoinValue, Integer> change;
+    HashMap<EnumCoinValue, Integer> change;
     Drink drink;
 
     /**
@@ -20,7 +19,7 @@ public class DrinkAndChange {
      */
     public DrinkAndChange(Drink drink, List<CoinAndQuantity> changes) {
         this.drink = drink;
-        this.change = new HashMap<CoinValue, Integer>();
+        this.change = new HashMap<EnumCoinValue, Integer>();
 
         for (CoinAndQuantity change : changes) {
 
@@ -33,11 +32,11 @@ public class DrinkAndChange {
         return drink.getName();
     }
 
-    public HashMap<CoinValue, Integer> getChange() {
+    public HashMap<EnumCoinValue, Integer> getChange() {
         return change;
     }
 
-    public void setChange(HashMap<CoinValue, Integer> change) {
+    public void setChange(HashMap<EnumCoinValue, Integer> change) {
         this.change = change;
     }
 }

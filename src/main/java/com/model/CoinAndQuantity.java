@@ -1,20 +1,20 @@
-package model;
+package com.model;
 
-import common.CoinValue;
+import com.interfaces_and_enum.EnumCoinValue;
 
 /**
  * This class is used to store change coins.
  */
 public class CoinAndQuantity implements Comparable<CoinAndQuantity> {
 
-    protected CoinValue type;
+    protected EnumCoinValue type;
     protected int quantity;
 
     /**
      * @param coin
      * @param quantity gives the number of coins for type coin
      */
-    public CoinAndQuantity(CoinValue coin, int quantity) {
+    public CoinAndQuantity(EnumCoinValue coin, int quantity) {
 
         this.type = coin;
         this.quantity = quantity;
@@ -32,7 +32,7 @@ public class CoinAndQuantity implements Comparable<CoinAndQuantity> {
         this.quantity -= quantity;
     }
 
-    public CoinValue getType() {
+    public EnumCoinValue getType() {
         return type;
     }
 
